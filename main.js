@@ -7,12 +7,17 @@ class Game {
     this.baseHeight = 720;
     this.ratio = this.height / this.baseHeight;
     this.player = new Player(this);
+    this.gravity;
 
     this.resize(window.innerWidth, window.innerHeight);
 
     window.addEventListener('resize', e => {
       this.resize(e.currentTarget.innerWidth, e.currentTarget.innerHeight);
     });
+    // mouse controls
+    this.canvas.addEventListener('mousedown', e => {
+      this.player.flap();
+    })
   }
 
   resize(width, height) {
@@ -23,6 +28,7 @@ class Game {
     this.height = this.canvas.height;
     this.ratio = this.height / this.baseHeight;
 
+    this.gravity = 0.15 * this.ratio;
     this.player.resize();
   }
 
