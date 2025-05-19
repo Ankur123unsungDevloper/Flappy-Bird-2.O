@@ -22,8 +22,8 @@ class Background {
     }
   }
   resize() {
-    this.scaleWidth = this.width + this.game.ratio;
-    this.scaleHeight = this.height + this.game.ratio;
+    this.scaleWidth = this.width * this.game.ratio;
+    this.scaleHeight = this.height * this.game.ratio;
     this.x = 0;
   }
 }

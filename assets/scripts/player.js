@@ -2,7 +2,7 @@ class Player {
   constructor (game) {
     this.game = game;
     this.x = 20;
-    this.y = 0;
+    this.y;
     this.spriteWidth = 200;
     this.spriteHeight = 200;
     this.width;
@@ -15,7 +15,7 @@ class Player {
   }
   update() {
     this.y += this.speedY;
-    if (this.y < this.game.height - this.height) {
+    if (!this.isTouchingBottom()) {
       this.speedY += this.game.gravity;
     }
     // bottom boundry

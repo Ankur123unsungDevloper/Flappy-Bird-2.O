@@ -23,7 +23,7 @@ class Game {
       this.player.flap();
     });
     // keyboard controls
-    this.canvas.addEventListener('keydown', e => {
+    window.addEventListener('keydown', e => {
       if (e.key === ' ' || e.key === 'Enter') {
         this.player.flap();
       }
