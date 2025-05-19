@@ -46,6 +46,10 @@ class Game {
     this.speed = 2 * this.ratio;
     this.background.resize();
     this.player.resize();
+    this.createObstacles();
+    this.obstacles.forEach(obstacles => {
+      obstacles.resize();
+    });
   }
 
   render() {
@@ -53,13 +57,17 @@ class Game {
     this.background.draw();
     this.player.update();
     this.player.draw();
+    this.obstacles.forEach(obstacles => {
+      obstacles.update();
+      obstacles.draw();
+    });
   }
   createObstacles() {
     this.obstacles = [];
     const firstX = 100;
     const obstaclesSpacing = 100;
     for (let i = 0; i < this.numberofObstacles; i++) {
-      this.obstacles.push(new Obstacle())
+      this.obstacles.push(new Obstacle(this, firstX + i * obstaclesSpacing));
     }
   }
 }
