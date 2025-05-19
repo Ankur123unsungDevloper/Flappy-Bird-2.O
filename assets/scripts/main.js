@@ -8,6 +8,8 @@ class Game {
     this.ratio = this.height / this.baseHeight;
     this.background = new Background(this);
     this.player = new Player(this);
+    this.obstacles = [];
+    this.numberofObstacles = 10;
     this.gravity;
     this.speed;
 
@@ -41,7 +43,7 @@ class Game {
     this.ratio = this.height / this.baseHeight;
 
     this.gravity = 0.15 * this.ratio;
-    this.speed = 3;
+    this.speed = 2 * this.ratio;
     this.background.resize();
     this.player.resize();
   }
@@ -51,6 +53,14 @@ class Game {
     this.background.draw();
     this.player.update();
     this.player.draw();
+  }
+  createObstacles() {
+    this.obstacles = [];
+    const firstX = 100;
+    const obstaclesSpacing = 100;
+    for (let i = 0; i < this.numberofObstacles; i++) {
+      this.obstacles.push(new Obstacle())
+    }
   }
 }
 
