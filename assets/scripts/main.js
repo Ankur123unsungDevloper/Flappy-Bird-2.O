@@ -14,6 +14,7 @@ class Game {
     this.speed;
     this.score;
     this.gameOver;
+    this.timer;
 
     this.resize(window.innerWidth, window.innerHeight);
 
@@ -41,6 +42,7 @@ class Game {
     this.canvas.height = height;
     this.ctx.fillStyle = 'red';
     this.ctx.font = '15px Bungee'
+    this.ctx.textAlign = 'right'
     this.width = this.canvas.width;
     this.height = this.canvas.height;
     this.ratio = this.height / this.baseHeight;
@@ -55,9 +57,11 @@ class Game {
     });
     this.score = 0;
     this.gameOver = false;
+    this.timer = 0;
   }
 
-  render() {
+  render(deltaTime) {
+    this.timer += deltaTime;
     this.background.update();
     this.background.draw();
     this.drawStatusText();
@@ -76,8 +80,17 @@ class Game {
       this.obstacles.push(new Obstacle(this, firstX + i * obstaclesSpacing));
     }
   }
+  formateTimer() {
+    return (
+      this.timer * 0.001
+    ).toFixed(1);
+  }
   drawStatusText() {
-    this.ctx.fillText('Score: ' + this.score, 10, 30);
+    this.ctx.save();
+    this.ctx.fillText('Score: ' + this.score, this.width - 10, 30);
+    this.ctx.textAlign = 'left';
+    this.ctx.fillText('Timer: ' + this.formateTimer(), 10, 30);
+    this.ctx.restore();
   }
 }
 
@@ -89,9 +102,12 @@ window.addEventListener('load', function () {
 
   const game = new Game(canvas, ctx);
 
-  function animate() {
+  let lastTime = 0;
+  function animate(timeStamp) {
+    const deltaTime = timeStamp - lastTime;
+    lastTime = timeStamp;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    game.render();
+    game.render(deltaTime);
     if (!game.gameOver) {
       requestAnimationFrame(animate);
     }
