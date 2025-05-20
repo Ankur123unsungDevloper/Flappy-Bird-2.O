@@ -41,8 +41,10 @@ class Game {
     this.canvas.width = width;
     this.canvas.height = height;
     this.ctx.fillStyle = 'red';
-    this.ctx.font = '15px Bungee'
-    this.ctx.textAlign = 'right'
+    this.ctx.font = '15px Bungee';
+    this.ctx.textAlign = 'right';
+    this.ctx.lineWidth = 3;
+    this.ctx.strokeStyle = 'white';
     this.width = this.canvas.width;
     this.height = this.canvas.height;
     this.ratio = this.height / this.baseHeight;
@@ -61,7 +63,9 @@ class Game {
   }
 
   render(deltaTime) {
-    this.timer += deltaTime;
+    if (!this.gameOver) {
+      this.timer += deltaTime;
+    }
     this.background.update();
     this.background.draw();
     this.drawStatusText();
@@ -80,6 +84,13 @@ class Game {
       this.obstacles.push(new Obstacle(this, firstX + i * obstaclesSpacing));
     }
   }
+  checkCollision(a, b) {
+    const dx = a.collisionX - b.collisionX;
+    const dy = a.collisionY - b.collisionY;
+    const distance = Math.hypot(dx, dy);
+    const sumOfRadii = a.collisionRadius + b.collisionRadius;
+    return distance <= sumOfRadii;
+  }
   formateTimer() {
     return (
       this.timer * 0.001
@@ -90,6 +101,11 @@ class Game {
     this.ctx.fillText('Score: ' + this.score, this.width - 10, 30);
     this.ctx.textAlign = 'left';
     this.ctx.fillText('Timer: ' + this.formateTimer(), 10, 30);
+    if (this.gameOver) {
+      this.ctx.textAlign = 'center';
+      this.ctx.font = '30px Bungee'
+      this.ctx.fillText('GAME OVER', this.width * 0.5, this.height * 0.5);
+    }
     this.ctx.restore();
   }
 }
@@ -108,9 +124,7 @@ window.addEventListener('load', function () {
     lastTime = timeStamp;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     game.render(deltaTime);
-    if (!game.gameOver) {
       requestAnimationFrame(animate);
-    }
   }
   requestAnimationFrame(animate);
 });
