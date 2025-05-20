@@ -40,6 +40,7 @@ class Game {
     this.canvas.width = width;
     this.canvas.height = height;
     this.ctx.fillStyle = 'red';
+    this.ctx.font = '15px Bungee'
     this.width = this.canvas.width;
     this.height = this.canvas.height;
     this.ratio = this.height / this.baseHeight;
@@ -59,6 +60,7 @@ class Game {
   render() {
     this.background.update();
     this.background.draw();
+    this.drawStatusText();
     this.player.update();
     this.player.draw();
     this.obstacles.forEach(obstacle => {
@@ -73,6 +75,9 @@ class Game {
     for (let i = 0; i < this.numberOfObstacles; i++) {
       this.obstacles.push(new Obstacle(this, firstX + i * obstaclesSpacing));
     }
+  }
+  drawStatusText() {
+    this.ctx.fillText('Score: ' + this.score, 10, 30);
   }
 }
 
