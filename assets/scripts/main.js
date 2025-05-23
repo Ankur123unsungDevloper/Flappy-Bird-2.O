@@ -15,6 +15,8 @@ class Game {
     this.score;
     this.gameOver;
     this.timer;
+    this.message1;
+    this.message2;
 
     this.resize(window.innerWidth, window.innerHeight);
 
@@ -102,9 +104,19 @@ class Game {
     this.ctx.textAlign = 'left';
     this.ctx.fillText('Timer: ' + this.formateTimer(), 10, 30);
     if (this.gameOver) {
+      if (this.player.collided) {
+        this.message1 = "Getting rusty?";
+        this.message2 = "Collision time" + this.formateTimer() + "s";
+      } else if (this.obstacles.length <= 0) {
+        this.message1 = "Nailed it!";
+        this.message2 = "Can you do it faster than " + this.formateTimer() + "s?";
+      }
       this.ctx.textAlign = 'center';
       this.ctx.font = '30px Bungee'
-      this.ctx.fillText('GAME OVER', this.width * 0.5, this.height * 0.5);
+      this.ctx.fillText(this.message1, this.width * 0.5, this.height * 0.5 - 40);
+      this.ctx.font = '15px Bungee'
+      this.ctx.fillText(this.message2, this.width * 0.5, this.height * 0.5 - 20);
+      this.ctx.fillText("Press 'R' to try again!", this.width * 0.5, this.height * 0.5);
     }
     this.ctx.restore();
   }
