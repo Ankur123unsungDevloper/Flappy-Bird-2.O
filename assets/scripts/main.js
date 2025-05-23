@@ -12,6 +12,8 @@ class Game {
     this.numberOfObstacles = 10;
     this.gravity;
     this.speed;
+    this.minSpeed;
+    this.maxSpeed;
     this.score;
     this.gameOver;
     this.timer;
@@ -31,6 +33,9 @@ class Game {
     window.addEventListener('keydown', e => {
       if (e.key === ' ' || e.key === 'Enter') {
         this.player.flap();
+      }
+      if (e.key === 'Shift' || e.key.toLowerCase() === 'c') {
+        this.player.startCharge();
       }
     });
     // touch controls
@@ -53,6 +58,8 @@ class Game {
 
     this.gravity = 0.15 * this.ratio;
     this.speed = 2 * this.ratio;
+    this.minSpeed = this.speed;
+    this.maxSpeed = this.speed * 5;
     this.background.resize();
     this.player.resize();
     this.createObstacles();
@@ -117,6 +124,9 @@ class Game {
       this.ctx.font = '15px Bungee'
       this.ctx.fillText(this.message2, this.width * 0.5, this.height * 0.5 - 20);
       this.ctx.fillText("Press 'R' to try again!", this.width * 0.5, this.height * 0.5);
+    }
+    for (let i = 0; i < this.player.energy; i++) {
+      this.ctx.fillRect(10 + i * 6, 40, 5, 15);
     }
     this.ctx.restore();
   }
