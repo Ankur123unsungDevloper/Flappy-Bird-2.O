@@ -16,6 +16,7 @@ class Player {
     this.energy = 30;
     this.maxEnergy = this.energy * 2;
     this.minEnergy = 15;
+    this.charging;
   }
   draw() {
     this.game.ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -46,9 +47,11 @@ class Player {
     this.collided = false;
   }
   startCharge() {
+    this.charging = true;
     this.game.speed = this.game.maxSpeed;
   }
   stopCharge() {
+    this.charging = false;
     this.game.speed = this.game.minSpeed;
   }
   isTouchingTop() {
@@ -60,6 +63,13 @@ class Player {
   handleEnergy() {
     if (this.energy < this.maxEnergy) {
       this.energy += 0.1;
+    }
+    if (this.charging) {
+      this.energy -= 1;
+      if (this.energy <= 0) {
+        this.energy = 0;
+        this.stopCharge();
+      }
     }
   }
   flap() {
