@@ -19,6 +19,10 @@ class Game {
     this.timer;
     this.message1;
     this.message2;
+    this.eventTimer = 0;
+    this.eventInterval = 150;
+    this.eventUpdate = false;
+    this.touchStartX;
 
     this.resize(window.innerWidth, window.innerHeight);
 
@@ -47,7 +51,7 @@ class Game {
   resize(width, height) {
     this.canvas.width = width;
     this.canvas.height = height;
-    this.ctx.fillStyle = 'red';
+    // this.ctx.fillStyle = 'yellow';
     this.ctx.font = '15px Bungee';
     this.ctx.textAlign = 'right';
     this.ctx.lineWidth = 3;
@@ -75,6 +79,7 @@ class Game {
     if (!this.gameOver) {
       this.timer += deltaTime;
     }
+    this.handlePeriodicEvents(deltaTime);
     this.background.update();
     this.background.draw();
     this.drawStatusText();
@@ -105,6 +110,15 @@ class Game {
       this.timer * 0.001
     ).toFixed(1);
   }
+  handlePeriodicEvents(deltaTime) {
+    if (this.eventTimer < this.eventInterval) {
+      this.eventTimer += deltaTime;
+      this.eventUpdate = false;
+    } else {
+      this.eventTimer = this.eventTimer % this.eventInterval;
+      this.eventUpdate = true;
+    }
+  }
   drawStatusText() {
     this.ctx.save();
     this.ctx.fillText('Score: ' + this.score, this.width - 10, 30);
@@ -126,13 +140,12 @@ class Game {
       this.ctx.fillText("Press 'R' to try again!", this.width * 0.5, this.height * 0.5);
     }
     if (this.player.energy <= 20) {
-      this.ctx.fillStyle = 'orange';
+      this.ctx.fillStyle = '#FF0000';
     } else if (this.player.energy >= this.player.maxEnergy) {
-      this.ctx.fillStyle = 'red';
+      this.ctx.fillStyle = '#B22222';
     }
     for (let i = 0; i < this.player.energy; i++) {
-      this.ctx.fillStyle = 'yellow';
-      this.ctx.fillRect(10, this.height - 10 - 2 * i, 5, 15);
+      this.ctx.fillRect(10, this.height - 10 - this.player.barSize * i, this.player.barSize * 5, this.player.barSize);
     }
     this.ctx.restore();
   }
