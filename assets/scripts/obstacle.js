@@ -9,9 +9,11 @@ class Obstacle {
     this.y = Math.random() * (this.game.height - this.scaledHeight);
     this.collisionX;
     this.collisionY;
-    this.collisionRadius = this.scaledWidth * 0.5;
+    this.collisionRadius;
     this.speedY = Math.random() < 0.5 ? -1 * this.game.ratio : 1 * this.game.ratio;
     this.markedForDeletion = false;
+    this.image = document.getElementById('smallGears');
+    this.frameX = Math.floor(Math.random() * 4);
   }
   update() {
     this.x -= this.game.speed;
@@ -40,16 +42,19 @@ class Obstacle {
     }
   }
   draw() {
-    this.game.ctx.fillRect(this.x, this.y, this.scaledWidth, this.scaledHeight);
-    this.game.ctx.beginPath();
-    this.game.ctx.arc(this.collisionX, this.collisionY, this.collisionRadius, 0, Math.PI * 2);
-    this.game.ctx.stroke();
+    this.game.ctx.drawImage(this.image, this.frameX * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.scaledWidth, this.scaledHeight);
+    if (this.game.debug) {
+      this.game.ctx.beginPath();
+      this.game.ctx.arc(this.collisionX, this.collisionY, this.collisionRadius, 0, Math.PI * 2);
+      this.game.ctx.stroke();
+    }
   }
   resize() {
     this.scaledWidth = this.spriteWidth * this.game.ratio;
     this.scaledHeight = this.spriteHeight * this.game.ratio;
+    this.collisionRadius = this.scaledWidth * 0.3;
   }
   isOffScreen() {
-    return this.x < -this.scaledWidth;
+    return this.x < -this.scaledWidth || this.y > this.game.height;
   }
 }

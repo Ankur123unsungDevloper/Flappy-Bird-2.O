@@ -8,6 +8,7 @@ class Game {
     this.ratio = this.height / this.baseHeight;
     this.background = new Background(this);
     this.player = new Player(this);
+    this.sound = new AudioControl();
     this.obstacles = [];
     this.numberOfObstacles = 10;
     this.gravity;
@@ -24,15 +25,23 @@ class Game {
     this.eventUpdate = false;
     this.touchStartX;
     this.SwipeDistance = 50;
+    this.debug = false;
+    this.debugButton = document.getElementById('debugButton');
 
     this.resize(window.innerWidth, window.innerHeight);
 
     window.addEventListener('resize', e => {
       this.resize(e.currentTarget.innerWidth, e.currentTarget.innerHeight);
     });
+    this.debugButton.addEventListener('click', e => {
+      this.debug = !this.debug;
+    });
     // mouse controls
     this.canvas.addEventListener('mousedown', e => {
       this.player.flap();
+    });
+    this.canvas.addEventListener('mouseup', e => {
+      this.player.wingsUp();
     });
     // keyboard controls
     window.addEventListener('keydown', e => {
@@ -42,6 +51,18 @@ class Game {
       if (e.key === 'Shift' || e.key.toLowerCase() === 'c') {
         this.player.startCharge();
       }
+      if (e.key.toLowerCase() === 'r') {
+        this.resize(window.innerWidth, window.innerHeight);
+      }
+      if (e.key.toLowerCase() === 'f') {
+        this.toggleFullScreen();
+      }
+      if (e.key.toLowerCase() === 'd') {
+        this.debug = !this.debug;
+      }
+    });
+    window.addEventListener('keyup', e => {
+      this.player.wingsUp();
     });
     // touch controls
     this.canvas.addEventListener('touchstart', e => {
@@ -146,7 +167,7 @@ class Game {
       this.ctx.fillText(this.message2, this.width * 0.5, this.height * 0.5 - 20);
       this.ctx.fillText("Press 'R' to try again!", this.width * 0.5, this.height * 0.5);
     }
-    if (this.player.energy <= 20) {
+    if (this.player.energy <= this.player.minEnergy) {
       this.ctx.fillStyle = '#FF0000';
     } else if (this.player.energy >= this.player.maxEnergy) {
       this.ctx.fillStyle = '#B22222';

@@ -12,22 +12,31 @@
 <body>
   <canvas id="canvas1"></canvas>
 
+  <div class="controls">
+    <button id="restartButton">R</button>
+    <button id="fullScreenButton">F</button>
+    <button id="debugButton">D</button>
+  </div>
+
   <div class="assets">
-    <img
-      src="assets/images/background_single.png" 
-      alt="background" 
-      id="background"
-    >
-    <img
-      src="assets/images/background_single2.png" 
-      alt="background2" 
-      id="background2"
-    >
+    <img src="assets/images/background_single.png" alt="background" id="background">
+    <img src="assets/images/background_single2.png" alt="background2" id="background2">
+    <img src="assets/images/player_fish.png" alt="player" id="player_fish">
+    <img src="assets/images/smallGears.png" alt="smallGears" id="smallGears">
+
+    <audio id="charge" src="assets/sounds/charge.mp3"></audio>
+    <audio id="flap1" src="assets/sounds/flap1.mp3"></audio>
+    <audio id="flap2" src="assets/sounds/flap2.mp3"></audio>
+    <audio id="flap3" src="assets/sounds/flap3.mp3"></audio>
+    <audio id="flap4" src="assets/sounds/flap4.mp3"></audio>
+    <audio id="flap5" src="assets/sounds/flap5.mp3"></audio>
   </div>
 
   <script src="assets/scripts/background.js"></script>
   <script src="assets/scripts/player.js"></script>
   <script src="assets/scripts/obstacle.js"></script>
   <script src="assets/scripts/main.js"></script>
+
+  <script src="assets/scripts/audio.js"></script>
 </body>
 </html>
