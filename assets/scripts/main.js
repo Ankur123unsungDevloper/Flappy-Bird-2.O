@@ -38,6 +38,9 @@ class Game {
     window.addEventListener('resize', e => {
       this.resize(e.currentTarget.innerWidth, e.currentTarget.innerHeight);
     });
+    this.fullScreenButton.addEventListener('click', e => {
+      this.toggleFullScreen();
+    })
     this.debugButton.addEventListener('click', e => {
       this.debug = !this.debug;
     });
@@ -71,21 +74,23 @@ class Game {
     });
     // touch controls
     this.canvas.addEventListener('touchstart', e => {
-      this.player.flap();
-      this.touchStartX = e.chargedTouches[ 0 ].pageX;
+      this.touchStartX = e.chargedTouches[0].pageX;
     });
     this.canvas.addEventListener('touchmove', e => {
+      e.preventDefault();
+    });
+    this.canvas.addEventListener('touchend', e => {
       if (e.chargedTouches[0].pageX - this.touchStartX > this.SwipeDistance) {
         this.player.startCharge();
+      } else {
+        this.player.flap();
       }
-    })
+    });
   }
 
   resize(width, height) {
     this.canvas.width = width;
     this.canvas.height = height;
-    // this.ctx.fillStyle = 'yellow';
-    this.ctx.font = '15px Bungee';
     this.ctx.textAlign = 'right';
     this.ctx.lineWidth = 1;
     this.ctx.strokeStyle = 'white';
@@ -96,6 +101,7 @@ class Game {
     this.bottomMargin = Math.floor(50 * this.ratio);
     this.smallFont = Math.ceil(20 * this.ratio);
     this.largeFont = Math.ceil(45 * this.ratio);
+    this.ctx.font = this.smallFont + 'px Bungee';
     this.gravity = 0.15 * this.ratio;
     this.speed = 2 * this.ratio;
     this.minSpeed = this.speed;
@@ -178,16 +184,16 @@ class Game {
   }
   drawStatusText() {
     this.ctx.save();
-    this.ctx.fillText('Score: ' + this.score, this.width - 10, 30);
+    this.ctx.fillText('Score: ' + this.score, this.width - this.smallFont, this.largeFont);
     this.ctx.textAlign = 'left';
-    this.ctx.fillText('Timer: ' + this.formateTimer(), 10, 30);
+    this.ctx.fillText('Timer: ' + this.formateTimer(), this.smallFont, this.largeFont);
     if (this.gameOver) {
       this.ctx.textAlign = 'center';
       this.ctx.font = this.largeFont + 'px Bungee';
-      this.ctx.fillText(this.message1, this.width * 0.5, this.height * 0.5 - 40);
+      this.ctx.fillText(this.message1, this.width * 0.5, this.height * 0.5 - this.largeFont, this.width);
       this.ctx.font = this.smallFont + 'px Bungee';
-      this.ctx.fillText(this.message2, this.width * 0.5, this.height * 0.5 - 20);
-      this.ctx.fillText("Press 'R' to try again!", this.width * 0.5, this.height * 0.5);
+      this.ctx.fillText(this.message2, this.width * 0.5, this.height * 0.5 - this.smallFont, this.width);
+      this.ctx.fillText("Press 'R' to try again!", this.width * 0.5, this.height * 0.5, this.width);
     }
     if (this.player.energy <= this.player.minEnergy) {
       this.ctx.fillStyle = '#FF0000';
@@ -213,7 +219,7 @@ window.addEventListener('load', function () {
   function animate(timeStamp) {
     const deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
     game.render(deltaTime);
     requestAnimationFrame(animate);
   }
