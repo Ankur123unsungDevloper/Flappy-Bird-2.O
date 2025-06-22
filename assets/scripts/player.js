@@ -43,7 +43,7 @@ class Player {
     }
     // bottom boundry
     if (this.isTouchingBottom()) {
-      this.y = this.game.height - this.height;
+      this.y = this.game.height - this.height - this.game.bottomMargin;
       this.wingsIdle();
     }
   }
@@ -76,7 +76,9 @@ class Player {
     this.game.speed = this.game.minSpeed;
   }
   wingsIdle() {
-    this.frameY = 0;
+    if (!this.charging) {
+      this.frameY = 0;
+    }
   }
   wingsDown() {
     if (!this.charging) {
@@ -95,7 +97,7 @@ class Player {
     return this.y <= 0;
   }
   isTouchingBottom() {
-    return this.y >= this.game.height - this.height;
+    return this.y >= this.game.height - this.height - this.game.bottomMargin;
   }
   handleEnergy() {
     if (this.game.eventUpdate) {

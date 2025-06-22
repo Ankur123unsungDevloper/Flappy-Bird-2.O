@@ -32,13 +32,13 @@ class Obstacle {
       this.game.obstacles = this.game.obstacles.filter(obstacle => !obstacle.markedForDeletion);
       this.game.score++;
       if (this.game.obstacles.length <= 0) {
-        this.game.gameOver = true;
+        this.game.triggerGameOver();
       }
     }
     if (this.game.checkCollision(this, this.game.player)) {
-      this.game.gameOver = true;
       this.game.player.collided = true;
       this.game.player.stopCharge();
+      this.game.triggerGameOver();
     }
   }
   draw() {
@@ -52,7 +52,7 @@ class Obstacle {
   resize() {
     this.scaledWidth = this.spriteWidth * this.game.ratio;
     this.scaledHeight = this.spriteHeight * this.game.ratio;
-    this.collisionRadius = this.scaledWidth * 0.3;
+    this.collisionRadius = this.scaledWidth * 0.4;
   }
   isOffScreen() {
     return this.x < -this.scaledWidth || this.y > this.game.height;
